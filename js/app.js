@@ -1,16 +1,16 @@
 window.onload = setup;
 
 // change current language
-function setLanguage() {
+function setLanguage(name, abbr) {
     // check current language
     const currLang = localStorage.getItem('lang');
-    if (currLang === this.abbr) {
+    if (currLang === abbr) {
         console.log("app: ignoring selected language");
         console.log("app: selected language is current langauge");
     } else {
-        console.log("app: changing language to " + this.name);
-        localStorage.setItem('lname', this.name)
-        localStorage.setItem('lang', this.abbr);
+        console.log("app: changing language to " + name);
+        localStorage.setItem('lname', name)
+        localStorage.setItem('lang', abbr);
     }
 }
 
@@ -20,7 +20,7 @@ async function getLanguages() {
     let response = await fetch(url);
     let data = await response.json();
     if (data === undefined) {
-        return {};
+        return [];
     }
     return data;
 }
@@ -29,10 +29,10 @@ async function setup() {
     // check current language
     const currLang = localStorage.getItem('lang');
     // set default to English if undefined
-    if (currLang === undefined) {
+    if (currLang === null || currLang === "undefined") {
         console.log("app: no language selected");
         console.log("app: language defaulted to en");
-        setLanguage("en");
+        setLanguage("English", "en");
     } else {
         console.log("app: default language detected!");
         console.log("app: current language - " + currLang);
@@ -40,10 +40,15 @@ async function setup() {
 
     const langDropdowns = document.getElementById("language-menu");
     let languages = await getLanguages();
+
+    languages.sort(function (a, b) {
+        return a["name"] > b["name"] ? 1 : -1;
+    });
+
     for (language of languages) {
         let item = document.createElement("li");
         let tag = document.createElement("a");
-        tag.onclick = setLanguage.bind(language);
+        tag.onclick = setLanguage.bind(null, language.name, language.abbr);
         tag.className = "dropdown-item"
         tag.innerText = language.name;
         item.append(tag)

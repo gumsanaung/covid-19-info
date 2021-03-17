@@ -6,5 +6,9 @@
     {
         "name": "Vietnamese",
         "abbr": "vi"
+    },
+    {
+        "name": "Burmese",
+        "abbr": "my"
     }
 ]
